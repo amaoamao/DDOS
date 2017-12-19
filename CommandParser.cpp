@@ -10,6 +10,7 @@
 #include "Utils.h"
 #include "ConfigLibrary.h"
 #include "SSH.h"
+#include "SYN.h"
 
 DDosLibrary *CommandParser::parse(const std::string &command) {
     error = false;
@@ -32,8 +33,15 @@ DDosLibrary *CommandParser::parse(const std::string &command) {
             library = new SSH(args, tokens[1]);
         }
     } else if (tokens[0] == commandSYN) {
-        error = true;
-        message = "Unimplemented.";
+        if (tokens.size() != 4) {
+            error = true;
+            message = "Wrong argument format.\nUsage: syn [targetHost] [targetPort] [threadCount]";
+        } else {
+            strcpy(const_cast<char *>(args.target_ip), tokens[1].c_str());
+            args.target_port = static_cast<uint16_t>(std::atoi(tokens[2].c_str()));
+            args.thread_num = std::atoi(tokens[3].c_str());
+            library = new SYN(args);
+        }
     } else if (tokens[0] == commandLoris) {
         if (tokens.size() != 4) {
             error = true;
@@ -55,7 +63,7 @@ DDosLibrary *CommandParser::parse(const std::string &command) {
         }
     } else {
         error = true;
-        message = "Wrong command [" + tokens[0] + "]\nCommand could be\n\tsyn\n\tloris\n\tload\n\tssh";
+        message = "Unknown command [" + tokens[0] + "]\nCommand could be\n\tsyn\n\tloris\n\tload\n\tssh";
     }
     return library;
 }

